@@ -4,7 +4,7 @@
 
 ## 專案簡介
 
-本專案為 AI 內容引擎（Python + FastAPI），採用微服務架構，負責關鍵字蒐集、AI 文章生成等重型任務，並與主系統（Laravel）透過 RESTful API 溝通。
+本專案為 AI 內容引擎（Python + FastAPI），採用微服務架構，負責關鍵字蒐集、AI 文章生成等重型任務，並與主系統透過 RESTful API 溝通。
 
 ---
 
@@ -23,8 +23,8 @@
 
 ### 1. 前置需求
 
-- 已安裝 [Git](https://git-scm.com/)
-- 已安裝 [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [Git](https://git-scm.com/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 ### 2. 一鍵初始化
 
@@ -68,4 +68,3 @@ ai_content_service/
 ## 其他說明
 
 - 請勿將 `.env` 檔案提交至版本控制。
-- 若有任何問題，請參考 PRD 文件或聯絡專案負責人。
