@@ -1,0 +1,84 @@
+# @format
+
+version: "3.8"
+name: "ai_generate_content_service"
+
+services:
+  ai_content_service:
+    build:
+      context: .
+      dockerfile: docker/ai_content_service.dockerfile
+    container_name: ai_content_service
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    depends_on:
+      - celery_worker
+      - celery_beat
+      - redis
+      - db
+    networks:
+      - ai_content_net
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: docker/ai_content_service.dockerfile
+    container_name: celery_worker
+    command: celery -A app.core.celery_worker.celery_app worker --loglevel=info
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    networks:
+      - ai_content_net
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: docker/ai_content_service.dockerfile
+    container_name: celery_beat
+    command: celery -A app.core.celery_worker.celery_app beat --loglevel=info
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    networks:
+      - ai_content_net
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:${REDIS_PORT}"
+    networks:
+      - ai_content_net
+
+  db:
+    image: mysql:8.0
+    container_name: ai_content_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3307:${DB_PORT}" # 本機 3307 對應 container，方便 GUI 連線
+    volumes:
+      - ${DB_DATA_PATH}:/var/lib/mysql
+    networks:
+      - ai_content_net
+
+networks:
+  ai_content_net:
+    driver: bridge

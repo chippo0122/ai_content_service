@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "ai_content_service"
+version = "0.1.0"
+description = "AI 內容引擎微服務 (FastAPI)"
+authors = ["chippo19970122@gmail.com"]
+readme = "README.md"
+
+packages = [
+    { include = "app" }
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+fastapi = "^0.110.0"
+uvicorn = {extras = ["standard"], version = "^0.29.0"}
+
+sqlalchemy = "^2.0"
+alembic = "^1.13"
+mysqlclient = "^2.2"
+python-dotenv = "^1.0"
+requests = "^2.32"
+feedparser = "^6.0"
+celery = "^5.3"
+redis = "^5.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.0.0"
+ruff = "^0.4.0"
+mypy = "^1.8.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
